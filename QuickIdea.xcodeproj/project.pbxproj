@@ -1,0 +1,530 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01FFBD44C75DE007D43AD730 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2313E2C58DE6D83AB10D96 /* Foundation.framework */; };
+		14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E113C83826CD681C9D2A80E /* AppDelegate.swift */; };
+		18963261793ED195F6042F29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA98FF3BA1615C154EC363C0 /* Assets.xcassets */; };
+		4D8EE85DD5CF6DD640F9A02D /* QuickIdeaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC189A18AB276A87FC36D0 /* QuickIdeaWidget.swift */; };
+		80EB35CD4FEE637FE1118175 /* QuickIdeaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 59BFA6CB2901D4E3F8883308 /* QuickIdeaWidgetExtension.appex */; };
+		A668F7EB4D7C61DAF21D3242 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17464B42E3F895CD069085D0 /* Assets.xcassets */; };
+		ED30DF3440B7A05E83FE30F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2313E2C58DE6D83AB10D96 /* Foundation.framework */; };
+		EFA7883E2F38EE0E00F1E3AB /* AddIdeaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA788392F38EE0E00F1E3AB /* AddIdeaView.swift */; };
+		EFA7883F2F38EE0E00F1E3AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883A2F38EE0E00F1E3AB /* ContentView.swift */; };
+		EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883B2F38EE0E00F1E3AB /* Idea.swift */; };
+		EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */; };
+		EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		20C6E2B38419C6A0F2533A22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05CC39171A7F2BAF5535790B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 50282A92775CC813803FF026;
+			remoteInfo = QuickIdeaWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A0104FBB613E76BBA67C4504 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				80EB35CD4FEE637FE1118175 /* QuickIdeaWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		17464B42E3F895CD069085D0 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2C411CC0026E13CC9DC25F3F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3674B8C7519C15807145ACF1 /* QuickIdea.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickIdea.entitlements; sourceTree = "<group>"; };
+		4A266D426F68741986019CA7 /* QuickIdea.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = QuickIdea.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E0E7FC551F0DF3F62842AF0 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		59BFA6CB2901D4E3F8883308 /* QuickIdeaWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = QuickIdeaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		678E52014465A988F0C9238B /* QuickIdeaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickIdeaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F2313E2C58DE6D83AB10D96 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		7470A29260DF1253F5A7110D /* QuickIdeaWidgetExtension.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickIdeaWidgetExtension.entitlements; sourceTree = "<group>"; };
+		8E113C83826CD681C9D2A80E /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CA98FF3BA1615C154EC363C0 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CB3BB54EEBF3B12F16679630 /* QuickIdea.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickIdea.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7AC189A18AB276A87FC36D0 /* QuickIdeaWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = QuickIdeaWidget.swift; sourceTree = "<group>"; };
+		EFA788392F38EE0E00F1E3AB /* AddIdeaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdeaView.swift; sourceTree = "<group>"; };
+		EFA7883A2F38EE0E00F1E3AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		EFA7883B2F38EE0E00F1E3AB /* Idea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idea.swift; sourceTree = "<group>"; };
+		EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaListView.swift; sourceTree = "<group>"; };
+		EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		359BD8D98418FE15DAD6270F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED30DF3440B7A05E83FE30F0 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7BCB70B74D6429636B178441 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01FFBD44C75DE007D43AD730 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		069CFE5187F849DDDED71EF4 = {
+			isa = PBXGroup;
+			children = (
+				09FD2A44137FAAFA0B47A3CC /* Products */,
+				F2094E1BB88068BA4D77BF5B /* Frameworks */,
+				8D95F3A249413E19E51BF9D8 /* QuickIdea */,
+				D6209969985A20BAE58884C2 /* QuickIdeaWidgetExtension */,
+				73417BA0AC514658C281224E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		09FD2A44137FAAFA0B47A3CC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB3BB54EEBF3B12F16679630 /* QuickIdea.app */,
+				678E52014465A988F0C9238B /* QuickIdeaWidgetExtension.appex */,
+				4A266D426F68741986019CA7 /* QuickIdea.app */,
+				59BFA6CB2901D4E3F8883308 /* QuickIdeaWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		73417BA0AC514658C281224E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8D95F3A249413E19E51BF9D8 /* QuickIdea */ = {
+			isa = PBXGroup;
+			children = (
+				EFA788392F38EE0E00F1E3AB /* AddIdeaView.swift */,
+				EFA7883A2F38EE0E00F1E3AB /* ContentView.swift */,
+				EFA7883B2F38EE0E00F1E3AB /* Idea.swift */,
+				EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */,
+				EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */,
+				2C411CC0026E13CC9DC25F3F /* Info.plist */,
+				3674B8C7519C15807145ACF1 /* QuickIdea.entitlements */,
+				17464B42E3F895CD069085D0 /* Assets.xcassets */,
+				8E113C83826CD681C9D2A80E /* AppDelegate.swift */,
+			);
+			path = QuickIdea;
+			sourceTree = "<group>";
+		};
+		C8083A865C2135F18BBA6542 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6F2313E2C58DE6D83AB10D96 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		D6209969985A20BAE58884C2 /* QuickIdeaWidgetExtension */ = {
+			isa = PBXGroup;
+			children = (
+				4E0E7FC551F0DF3F62842AF0 /* Info.plist */,
+				7470A29260DF1253F5A7110D /* QuickIdeaWidgetExtension.entitlements */,
+				CA98FF3BA1615C154EC363C0 /* Assets.xcassets */,
+				D7AC189A18AB276A87FC36D0 /* QuickIdeaWidget.swift */,
+			);
+			path = QuickIdeaWidgetExtension;
+			sourceTree = "<group>";
+		};
+		F2094E1BB88068BA4D77BF5B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C8083A865C2135F18BBA6542 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		50282A92775CC813803FF026 /* QuickIdeaWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33B64FEFE45B4B374820FC26 /* Build configuration list for PBXNativeTarget "QuickIdeaWidgetExtension" */;
+			buildPhases = (
+				43FF887F6F88F82805EBAF23 /* Sources */,
+				359BD8D98418FE15DAD6270F /* Frameworks */,
+				2D4A78BD1A86C49EC21B7645 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuickIdeaWidgetExtension;
+			productName = QuickIdeaWidgetExtension;
+			productReference = 59BFA6CB2901D4E3F8883308 /* QuickIdeaWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D6E8BE42A88A6AA22F8E8AF2 /* QuickIdea */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D24F772ADFC4F2638F2918EB /* Build configuration list for PBXNativeTarget "QuickIdea" */;
+			buildPhases = (
+				08B003349466CD5BCCCB98E6 /* Sources */,
+				7BCB70B74D6429636B178441 /* Frameworks */,
+				189285CBED087556206D60C1 /* Resources */,
+				A0104FBB613E76BBA67C4504 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0CDBE40F67BD04816C554E48 /* PBXTargetDependency */,
+			);
+			name = QuickIdea;
+			productName = QuickIdea;
+			productReference = 4A266D426F68741986019CA7 /* QuickIdea.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		05CC39171A7F2BAF5535790B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					50282A92775CC813803FF026 = {
+						ProvisioningStyle = Automatic;
+					};
+					D6E8BE42A88A6AA22F8E8AF2 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 78A3FA9C846A791444821931 /* Build configuration list for PBXProject "QuickIdea" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 069CFE5187F849DDDED71EF4;
+			productRefGroup = 09FD2A44137FAAFA0B47A3CC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D6E8BE42A88A6AA22F8E8AF2 /* QuickIdea */,
+				50282A92775CC813803FF026 /* QuickIdeaWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		189285CBED087556206D60C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A668F7EB4D7C61DAF21D3242 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D4A78BD1A86C49EC21B7645 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18963261793ED195F6042F29 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		08B003349466CD5BCCCB98E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFA7883E2F38EE0E00F1E3AB /* AddIdeaView.swift in Sources */,
+				EFA7883F2F38EE0E00F1E3AB /* ContentView.swift in Sources */,
+				EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */,
+				EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */,
+				EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */,
+				14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43FF887F6F88F82805EBAF23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D8EE85DD5CF6DD640F9A02D /* QuickIdeaWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0CDBE40F67BD04816C554E48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = QuickIdeaWidgetExtension;
+			target = 50282A92775CC813803FF026 /* QuickIdeaWidgetExtension */;
+			targetProxy = 20C6E2B38419C6A0F2533A22 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0DCCA87801564EF8F9607F38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		71843BFEE59B637A878A6757 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = QuickIdeaWidgetExtension/QuickIdeaWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = QuickIdeaWidgetExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quickidea.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		75E9D19DFDEA6E825E098421 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = QuickIdea/QuickIdea.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = QuickIdea/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quickidea.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A0ADB586B23E7AC217B81A01 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		DE2930B9A6DA90F200D61A08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = QuickIdeaWidgetExtension/QuickIdeaWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = QuickIdeaWidgetExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quickidea.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		EEC08A73E1C8CAFEC66698C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = QuickIdea/QuickIdea.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = QuickIdea/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.quickidea.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		33B64FEFE45B4B374820FC26 /* Build configuration list for PBXNativeTarget "QuickIdeaWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE2930B9A6DA90F200D61A08 /* Release */,
+				71843BFEE59B637A878A6757 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		78A3FA9C846A791444821931 /* Build configuration list for PBXProject "QuickIdea" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DCCA87801564EF8F9607F38 /* Debug */,
+				A0ADB586B23E7AC217B81A01 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D24F772ADFC4F2638F2918EB /* Build configuration list for PBXNativeTarget "QuickIdea" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75E9D19DFDEA6E825E098421 /* Release */,
+				EEC08A73E1C8CAFEC66698C1 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 05CC39171A7F2BAF5535790B /* Project object */;
+}
