@@ -27,42 +27,42 @@ protocol ThemeColors {
     var glassBlur: CGFloat { get }
 }
 
-// MARK: - Glassmorphism 主题（灰黑色调）
+// MARK: - Glassmorphism 主题（Flomo 风格 - 柔和浅色）
 struct GlassmorphismTheme: ThemeColors {
-    // 深色背景
-    var background = Color(hex: "1a1a1a")
+    // Flomo 风格的浅色背景
+    var background = Color(hex: "f7f7f7")
 
     // 半透明次要背景（毛玻璃效果）
-    var secondaryBackground = Color(hex: "2a2a2a").opacity(0.6)
+    var secondaryBackground = Color(hex: "ffffff").opacity(0.7)
 
-    // 半透明卡片背景（毛玻璃效果）
-    var cardBackground = Color(hex: "3a3a3a").opacity(0.5)
+    // 半透明卡片背景（毛玻璃效果）- 白色带透明
+    var cardBackground = Color(hex: "ffffff").opacity(0.9)
 
-    // 主文字（白色）
-    var primaryText = Color(hex: "ffffff")
+    // 主文字（深灰）
+    var primaryText = Color(hex: "2c2c2c")
 
-    // 次要文字（浅灰）
-    var secondaryText = Color(hex: "a0a0a0")
+    // 次要文字（中灰）
+    var secondaryText = Color(hex: "8e8e93")
 
-    // 强调色（浅灰蓝）
-    var accent = Color(hex: "8b9dc3")
+    // 强调色（Flomo 蓝）
+    var accent = Color(hex: "4a90e2")
 
-    // 标签颜色（灰色系渐变）
+    // 标签颜色（柔和的彩色系）
     var tagColors = [
-        Color(hex: "8b9dc3"),  // 浅灰蓝
-        Color(hex: "9b8bc3"),  // 浅灰紫
-        Color(hex: "8bc39b"),  // 浅灰绿
-        Color(hex: "c3a88b")   // 浅灰棕
+        Color(hex: "4a90e2"),  // 蓝色
+        Color(hex: "9b59b6"),  // 紫色
+        Color(hex: "27ae60"),  // 绿色
+        Color(hex: "e67e22")   // 橙色
     ]
 
-    // 阴影颜色
-    var shadowColor = Color.black.opacity(0.3)
+    // 阴影颜色（极浅）
+    var shadowColor = Color.black.opacity(0.08)
 
     // 分隔线颜色
-    var divider = Color(hex: "4a4a4a")
+    var divider = Color(hex: "e5e5ea")
 
-    // 边框颜色（半透明白色）
-    var borderColor = Color.white.opacity(0.2)
+    // 边框颜色（浅灰）
+    var borderColor = Color(hex: "e5e5ea").opacity(0.6)
 
     // 模糊程度
     var glassBlur: CGFloat = 20

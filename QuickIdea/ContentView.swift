@@ -19,7 +19,6 @@ struct ContentView: View {
                 .tag(1)
         }
         .environmentObject(themeManager)
-        .preferredColorScheme(.dark)
         .accentColor(themeManager.currentTheme.colors.accent)
     }
 }

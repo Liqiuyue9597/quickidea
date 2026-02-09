@@ -69,7 +69,6 @@ struct AddIdeaView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") {
@@ -90,7 +89,6 @@ struct AddIdeaView: View {
                 isFocused = true
             }
         }
-        .preferredColorScheme(.dark)
     }
 
     private var tagSuggestions: some View {

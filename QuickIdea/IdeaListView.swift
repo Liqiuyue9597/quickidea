@@ -50,7 +50,6 @@ struct IdeaListView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -67,7 +66,6 @@ struct IdeaListView: View {
                     .environmentObject(themeManager)
             }
         }
-        .preferredColorScheme(.dark)
     }
 
     private var tagFilter: some View {
