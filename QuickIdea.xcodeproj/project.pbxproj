@@ -19,6 +19,8 @@
 		EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883B2F38EE0E00F1E3AB /* Idea.swift */; };
 		EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */; };
 		EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */; };
+		50D4058B958045998444534B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAA9466B7744BAA2984673 /* Theme.swift */; };
+		F5C8302344834CECA2608C12 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A39527F383493691EFC3B2 /* ThemePreviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		EFA7883B2F38EE0E00F1E3AB /* Idea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idea.swift; sourceTree = "<group>"; };
 		EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaListView.swift; sourceTree = "<group>"; };
 		EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		00CAA9466B7744BAA2984673 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		65A39527F383493691EFC3B2 /* ThemePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +125,8 @@
 				EFA788392F38EE0E00F1E3AB /* AddIdeaView.swift */,
 				EFA7883A2F38EE0E00F1E3AB /* ContentView.swift */,
 				EFA7883B2F38EE0E00F1E3AB /* Idea.swift */,
+				00CAA9466B7744BAA2984673 /* Theme.swift */,
+				65A39527F383493691EFC3B2 /* ThemePreviewView.swift */,
 				EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */,
 				EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */,
 				2C411CC0026E13CC9DC25F3F /* Info.plist */,
@@ -260,6 +266,8 @@
 				EFA7883E2F38EE0E00F1E3AB /* AddIdeaView.swift in Sources */,
 				EFA7883F2F38EE0E00F1E3AB /* ContentView.swift in Sources */,
 				EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */,
+				50D4058B958045998444534B /* Theme.swift in Sources */,
+				F5C8302344834CECA2608C12 /* ThemePreviewView.swift in Sources */,
 				EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */,
 				EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */,
 				14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */,

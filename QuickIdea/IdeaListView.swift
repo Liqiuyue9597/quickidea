@@ -6,6 +6,7 @@ struct IdeaListView: View {
     @Query(sort: \Idea.createdAt, order: .reverse) private var ideas: [Idea]
     @State private var showingAddIdea = false
     @State private var selectedTag: String?
+    @StateObject private var themeManager = ThemeManager()
 
     // 获取所有使用过的标签
     private var allTags: [String] {
@@ -30,16 +31,26 @@ struct IdeaListView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                tagFilter
+            ZStack {
+                // 背景
+                themeManager.currentTheme.colors.background
+                    .ignoresSafeArea()
 
-                if filteredIdeas.isEmpty {
-                    emptyState
-                } else {
-                    ideaList
+                VStack(spacing: 0) {
+                    tagFilter
+
+                    if filteredIdeas.isEmpty {
+                        emptyState
+                    } else {
+                        ideaList
+                    }
                 }
             }
             .navigationTitle(selectedTag != nil ? "#\(selectedTag!)" : "我的想法")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
@@ -47,13 +58,16 @@ struct IdeaListView: View {
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
+                            .foregroundColor(themeManager.currentTheme.colors.accent)
                     }
                 }
             }
             .sheet(isPresented: $showingAddIdea) {
                 AddIdeaView()
+                    .environmentObject(themeManager)
             }
         }
+        .preferredColorScheme(.dark)
     }
 
     private var tagFilter: some View {
@@ -62,7 +76,8 @@ struct IdeaListView: View {
                 FilterChip(
                     title: "全部",
                     count: ideas.count,
-                    isSelected: selectedTag == nil
+                    isSelected: selectedTag == nil,
+                    theme: themeManager.currentTheme.colors
                 ) {
                     selectedTag = nil
                 }
@@ -71,7 +86,8 @@ struct IdeaListView: View {
                     FilterChip(
                         title: "#\(tag)",
                         count: tagCount(tag),
-                        isSelected: selectedTag == tag
+                        isSelected: selectedTag == tag,
+                        theme: themeManager.currentTheme.colors
                     ) {
                         selectedTag = tag
                     }
@@ -80,62 +96,64 @@ struct IdeaListView: View {
             .padding(.horizontal)
             .padding(.vertical, 12)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(themeManager.currentTheme.colors.background)
     }
 
     private var emptyState: some View {
         VStack(spacing: 16) {
             Image(systemName: selectedTag == nil ? "lightbulb" : "tag")
                 .font(.system(size: 60))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
 
             if selectedTag == nil {
                 Text("还没有想法")
                     .font(.title2)
                     .fontWeight(.semibold)
+                    .foregroundColor(themeManager.currentTheme.colors.primaryText)
 
                 Text("点击右上角 + 记录你的第一个想法")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
                     .multilineTextAlignment(.center)
             } else {
                 Text("没有 #\(selectedTag!) 标签的想法")
                     .font(.title3)
                     .fontWeight(.semibold)
+                    .foregroundColor(themeManager.currentTheme.colors.primaryText)
 
                 Text("点击「全部」查看所有想法")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var ideaList: some View {
-        List {
-            ForEach(filteredIdeas) { idea in
-                IdeaRow(idea: idea)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            deleteIdea(idea)
-                        } label: {
-                            Label("删除", systemImage: "trash")
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                ForEach(filteredIdeas) { idea in
+                    IdeaRow(idea: idea, theme: themeManager.currentTheme.colors)
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                deleteIdea(idea)
+                            } label: {
+                                Label("删除", systemImage: "trash")
+                            }
+
+                            Button {
+                                toggleComplete(idea)
+                            } label: {
+                                Label(
+                                    idea.isCompleted ? "取消完成" : "完成",
+                                    systemImage: idea.isCompleted ? "arrow.uturn.backward" : "checkmark"
+                                )
+                            }
                         }
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            toggleComplete(idea)
-                        } label: {
-                            Label(
-                                idea.isCompleted ? "取消完成" : "完成",
-                                systemImage: idea.isCompleted ? "arrow.uturn.backward" : "checkmark"
-                            )
-                        }
-                        .tint(idea.isCompleted ? .orange : .green)
-                    }
+                }
             }
+            .padding()
         }
-        .listStyle(.insetGrouped)
     }
 
     private func deleteIdea(_ idea: Idea) {
@@ -149,26 +167,32 @@ struct IdeaListView: View {
 
 struct IdeaRow: View {
     let idea: Idea
+    let theme: ThemeColors
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             // 标签行
             if !idea.tags.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
-                        ForEach(idea.tags, id: \.self) { tag in
+                        ForEach(Array(idea.tags.enumerated()), id: \.offset) { index, tag in
                             Text("#\(tag)")
                                 .font(.caption)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.blue.opacity(0.1))
-                                .foregroundStyle(.blue)
+                                .fontWeight(.medium)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+                                .background(theme.tagColors[index % theme.tagColors.count].opacity(0.2))
+                                .foregroundStyle(theme.tagColors[index % theme.tagColors.count])
                                 .clipShape(Capsule())
+                                .overlay(
+                                    Capsule()
+                                        .stroke(theme.tagColors[index % theme.tagColors.count].opacity(0.3), lineWidth: 1)
+                                )
                         }
 
                         if idea.isCompleted {
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
+                                .foregroundStyle(theme.accent)
                                 .font(.caption)
                         }
                     }
@@ -176,7 +200,7 @@ struct IdeaRow: View {
             } else if idea.isCompleted {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(theme.accent)
                 }
             }
 
@@ -184,14 +208,15 @@ struct IdeaRow: View {
             Text(idea.cleanContent.isEmpty ? idea.content : idea.cleanContent)
                 .font(.body)
                 .strikethrough(idea.isCompleted)
-                .foregroundStyle(idea.isCompleted ? .secondary : .primary)
+                .foregroundStyle(idea.isCompleted ? theme.secondaryText : theme.primaryText)
 
             // 时间
-            Text(idea.createdAt, style: .relative) + Text(" 前")
+            (Text(idea.createdAt, style: .relative) + Text(" 前"))
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(theme.secondaryText)
         }
-        .padding(.vertical, 4)
+        .padding(16)
+        .glassCard(theme: theme)
     }
 }
 
@@ -199,6 +224,7 @@ struct FilterChip: View {
     let title: String
     var count: Int? = nil
     let isSelected: Bool
+    let theme: ThemeColors
     let action: () -> Void
 
     var body: some View {
@@ -211,14 +237,18 @@ struct FilterChip: View {
                 if let count = count {
                     Text("\(count)")
                         .font(.caption2)
-                        .foregroundStyle(isSelected ? .white.opacity(0.8) : .secondary)
+                        .foregroundStyle(isSelected ? theme.primaryText.opacity(0.8) : theme.secondaryText)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(isSelected ? Color.blue : Color(.systemGray5))
-            .foregroundStyle(isSelected ? .white : .primary)
+            .background(isSelected ? theme.accent.opacity(0.3) : theme.secondaryBackground)
+            .foregroundStyle(isSelected ? theme.primaryText : theme.secondaryText)
             .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(isSelected ? theme.accent : theme.borderColor, lineWidth: 1)
+            )
         }
     }
 }

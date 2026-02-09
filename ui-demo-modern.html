@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickIdea 现代 UI 风格</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            background: #f5f5f7;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1d1d1f;
+            font-size: 48px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #86868b;
+            font-size: 18px;
+            margin-bottom: 60px;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+        }
+
+        .theme-card {
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .theme-header {
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .theme-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .theme-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .theme-subtitle {
+            font-size: 15px;
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        .theme-content {
+            padding: 30px;
+        }
+
+        .idea-card {
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .idea-card:hover {
+            transform: translateX(4px);
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .idea-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .idea-time {
+            font-size: 13px;
+            opacity: 0.5;
+            font-weight: 500;
+        }
+
+        .add-button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.2px;
+        }
+
+        .add-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .add-button:active {
+            transform: scale(0.98);
+        }
+
+        /* 风格 1: Monochrome Pro (现代单色) */
+        .monochrome {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        }
+        .monochrome .theme-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .monochrome .theme-badge {
+            background: #000000;
+            color: #ffffff;
+        }
+        .monochrome .theme-title {
+            color: #000000;
+        }
+        .monochrome .theme-subtitle {
+            color: #6c757d;
+        }
+        .monochrome .theme-content {
+            background: #ffffff;
+        }
+        .monochrome .idea-card {
+            background: #f8f9fa;
+            color: #212529;
+            border: 1px solid #e9ecef;
+        }
+        .monochrome .idea-card:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+        }
+        .monochrome .tag {
+            background: #000000;
+            color: #ffffff;
+        }
+        .monochrome .add-button {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        /* 风格 2: Glassmorphism (玻璃态) */
+        .glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.4) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .glass .theme-header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 100%);
+            backdrop-filter: blur(30px);
+        }
+        .glass .theme-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+        }
+        .glass .theme-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glass .theme-subtitle {
+            color: #495057;
+        }
+        .glass .theme-content {
+            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%);
+            backdrop-filter: blur(10px);
+        }
+        .glass .idea-card {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            color: #212529;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+        }
+        .glass .idea-card:hover {
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+        }
+        .glass .tag {
+            background: rgba(102,126,234,0.15);
+            color: #667eea;
+            backdrop-filter: blur(10px);
+        }
+        .glass .add-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+        }
+
+        /* 风格 3: Neumorphism (新拟态) */
+        .neuro {
+            background: #e0e5ec;
+            box-shadow:
+                20px 20px 60px #bebec0,
+                -20px -20px 60px #ffffff;
+        }
+        .neuro .theme-header {
+            background: #e0e5ec;
+        }
+        .neuro .theme-badge {
+            background: #e0e5ec;
+            color: #4a5568;
+            box-shadow:
+                4px 4px 10px #bebec0,
+                -4px -4px 10px #ffffff;
+        }
+        .neuro .theme-title {
+            color: #2d3748;
+        }
+        .neuro .theme-subtitle {
+            color: #718096;
+        }
+        .neuro .theme-content {
+            background: #e0e5ec;
+        }
+        .neuro .idea-card {
+            background: #e0e5ec;
+            color: #2d3748;
+            box-shadow:
+                8px 8px 20px #bebec0,
+                -8px -8px 20px #ffffff;
+        }
+        .neuro .idea-card:hover {
+            box-shadow:
+                inset 2px 2px 5px #bebec0,
+                inset -2px -2px 5px #ffffff;
+        }
+        .neuro .tag {
+            background: #e0e5ec;
+            color: #4a5568;
+            box-shadow:
+                3px 3px 6px #bebec0,
+                -3px -3px 6px #ffffff;
+        }
+        .neuro .add-button {
+            background: #e0e5ec;
+            color: #2d3748;
+            box-shadow:
+                10px 10px 20px #bebec0,
+                -10px -10px 20px #ffffff;
+        }
+        .neuro .add-button:hover {
+            box-shadow:
+                inset 5px 5px 10px #bebec0,
+                inset -5px -5px 10px #ffffff;
+        }
+
+        /* 风格 4: Dark Minimal (深色极简) */
+        .dark {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 100%);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .dark .theme-header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .dark .theme-badge {
+            background: #ffffff;
+            color: #000000;
+        }
+        .dark .theme-title {
+            color: #ffffff;
+        }
+        .dark .theme-subtitle {
+            color: #888888;
+        }
+        .dark .theme-content {
+            background: #0a0a0a;
+        }
+        .dark .idea-card {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            border: 1px solid #2a2a2a;
+        }
+        .dark .idea-card:hover {
+            background: #2a2a2a;
+            border-color: #3a3a3a;
+        }
+        .dark .tag {
+            background: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid #3a3a3a;
+        }
+        .dark .add-button {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* 风格 5: Pastel Dream (马卡龙) */
+        .pastel {
+            background: linear-gradient(145deg, #ffeef8 0%, #e6f3ff 100%);
+            box-shadow: 0 20px 60px rgba(255,182,193,0.2);
+        }
+        .pastel .theme-header {
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe8f5 100%);
+        }
+        .pastel .theme-badge {
+            background: linear-gradient(135deg, #ffb6d9 0%, #c4b5fd 100%);
+            color: #ffffff;
+        }
+        .pastel .theme-title {
+            background: linear-gradient(135deg, #ff8dc7 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pastel .theme-subtitle {
+            color: #9d5c8c;
+        }
+        .pastel .theme-content {
+            background: linear-gradient(145deg, #fff5fc 0%, #f0f7ff 100%);
+        }
+        .pastel .idea-card {
+            background: #ffffff;
+            color: #4a4a4a;
+            border: 2px solid #ffd6e8;
+        }
+        .pastel .idea-card:hover {
+            border-color: #ffb6d9;
+            box-shadow: 0 8px 24px rgba(255,182,217,0.3);
+        }
+        .pastel .tag:nth-child(1) {
+            background: rgba(255,182,217,0.3);
+            color: #d946a6;
+        }
+        .pastel .tag:nth-child(2) {
+            background: rgba(167,139,250,0.3);
+            color: #8b5cf6;
+        }
+        .pastel .tag:nth-child(3) {
+            background: rgba(147,197,253,0.3);
+            color: #3b82f6;
+        }
+        .pastel .add-button {
+            background: linear-gradient(135deg, #ffb6d9 0%, #c4b5fd 100%);
+            color: #ffffff;
+        }
+
+        /* 风格 6: Nature Green (自然绿) */
+        .nature {
+            background: linear-gradient(145deg, #f0fdf4 0%, #ecfdf5 100%);
+            box-shadow: 0 20px 60px rgba(34,197,94,0.1);
+        }
+        .nature .theme-header {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+        .nature .theme-badge {
+            background: #059669;
+            color: #ffffff;
+        }
+        .nature .theme-title {
+            color: #065f46;
+        }
+        .nature .theme-subtitle {
+            color: #047857;
+        }
+        .nature .theme-content {
+            background: #f0fdf4;
+        }
+        .nature .idea-card {
+            background: #ffffff;
+            color: #064e3b;
+            border: 2px solid #d1fae5;
+        }
+        .nature .idea-card:hover {
+            background: #f0fdf4;
+            border-color: #a7f3d0;
+        }
+        .nature .tag:nth-child(1) {
+            background: rgba(16,185,129,0.15);
+            color: #059669;
+        }
+        .nature .tag:nth-child(2) {
+            background: rgba(34,197,94,0.15);
+            color: #16a34a;
+        }
+        .nature .tag:nth-child(3) {
+            background: rgba(74,222,128,0.15);
+            color: #15803d;
+        }
+        .nature .add-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            color: #86868b;
+            font-size: 15px;
+        }
+
+        .footer-subtitle {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #b0b0b0;
+        }
+
+        @media (max-width: 768px) {
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QuickIdea 现代 UI 精选</h1>
+        <p class="subtitle">简洁 · 优雅 · 现代 - 六种精心设计的界面风格</p>
+
+        <div class="themes-grid">
+            <!-- 风格 1: Monochrome Pro -->
+            <div class="theme-card monochrome">
+                <div class="theme-header">
+                    <div class="theme-badge">Premium</div>
+                    <div class="theme-title">Monochrome Pro</div>
+                    <div class="theme-subtitle">现代单色 · 极致专业</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">＋ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 2: Glassmorphism -->
+            <div class="theme-card glass">
+                <div class="theme-header">
+                    <div class="theme-badge">Trending</div>
+                    <div class="theme-title">Glassmorphism</div>
+                    <div class="theme-subtitle">玻璃态 · 通透质感</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">＋ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 3: Neumorphism -->
+            <div class="theme-card neuro">
+                <div class="theme-header">
+                    <div class="theme-badge">New</div>
+                    <div class="theme-title">Neumorphism</div>
+                    <div class="theme-subtitle">新拟态 · 立体浮雕</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">＋ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 4: Dark Minimal -->
+            <div class="theme-card dark">
+                <div class="theme-header">
+                    <div class="theme-badge">Dark</div>
+                    <div class="theme-title">Dark Minimal</div>
+                    <div class="theme-subtitle">深色极简 · 护眼沉浸</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">＋ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 5: Pastel Dream -->
+            <div class="theme-card pastel">
+                <div class="theme-header">
+                    <div class="theme-badge">Sweet</div>
+                    <div class="theme-title">Pastel Dream</div>
+                    <div class="theme-subtitle">马卡龙 · 梦幻柔和</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">＋ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 6: Nature Green -->
+            <div class="theme-card nature">
+                <div class="theme-header">
+                    <div class="theme-badge">Fresh</div>
+                    <div class="theme-title">Nature Green</div>
+                    <div class="theme-subtitle">自然绿 · 清新舒适</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">＋ 添加想法</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>✨ 选择最适合你的风格</p>
+            <p class="footer-subtitle">所有风格都经过精心设计，保持简洁优雅的现代美学</p>
+        </div>
+    </div>
+</body>
+</html>

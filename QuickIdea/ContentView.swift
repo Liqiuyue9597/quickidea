@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab = 0
+    @StateObject private var themeManager = ThemeManager()
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -17,6 +18,9 @@ struct ContentView: View {
                 }
                 .tag(1)
         }
+        .environmentObject(themeManager)
+        .preferredColorScheme(.dark)
+        .accentColor(themeManager.currentTheme.colors.accent)
     }
 }
 

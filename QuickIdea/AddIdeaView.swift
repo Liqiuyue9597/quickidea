@@ -5,6 +5,7 @@ struct AddIdeaView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @StateObject private var tagManager = TagManager.shared
+    @EnvironmentObject var themeManager: ThemeManager
 
     @State private var content = ""
     @FocusState private var isFocused: Bool
@@ -16,57 +17,65 @@ struct AddIdeaView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                // 标签建议区域
-                if !tagManager.recentTags.isEmpty || !TagManager.suggestedTags.isEmpty {
-                    tagSuggestions
-                        .padding(.horizontal)
-                        .padding(.vertical, 12)
-                        .background(Color(.systemGroupedBackground))
-                }
+            ZStack {
+                // 背景
+                themeManager.currentTheme.colors.background
+                    .ignoresSafeArea()
 
-                // 输入区域
-                ZStack(alignment: .topLeading) {
-                    TextEditor(text: $content)
-                        .focused($isFocused)
-                        .frame(maxHeight: .infinity)
-                        .padding(12)
-                        .background(Color(.systemBackground))
-                        .scrollContentBackground(.hidden)
-
-                    if content.isEmpty {
-                        VStack(spacing: 12) {
-                            Image(systemName: "number")
-                                .font(.system(size: 40))
-                                .foregroundStyle(.secondary)
-                            Text("输入想法，用 #标签 来分类")
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                            Text("例如: 今天要完成项目文档 #工作 #待办")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding(.top, 80)
-                        .frame(maxWidth: .infinity)
-                        .allowsHitTesting(false)
+                VStack(spacing: 0) {
+                    // 标签建议区域
+                    if !tagManager.recentTags.isEmpty || !TagManager.suggestedTags.isEmpty {
+                        tagSuggestions
+                            .padding(.horizontal)
+                            .padding(.vertical, 12)
                     }
-                }
 
-                // 当前已输入的标签
-                if !detectedTags.isEmpty {
-                    currentTagsView
-                        .padding()
-                        .background(Color(.systemGroupedBackground))
+                    // 输入区域
+                    ZStack(alignment: .topLeading) {
+                        TextEditor(text: $content)
+                            .focused($isFocused)
+                            .frame(maxHeight: .infinity)
+                            .padding(16)
+                            .scrollContentBackground(.hidden)
+                            .foregroundColor(themeManager.currentTheme.colors.primaryText)
+
+                        if content.isEmpty {
+                            VStack(spacing: 12) {
+                                Image(systemName: "number")
+                                    .font(.system(size: 40))
+                                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                                Text("输入想法,用 #标签 来分类")
+                                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                                    .multilineTextAlignment(.center)
+                                Text("例如: 今天要完成项目文档 #工作 #待办")
+                                    .font(.caption)
+                                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText.opacity(0.7))
+                                    .multilineTextAlignment(.center)
+                            }
+                            .padding(.top, 80)
+                            .frame(maxWidth: .infinity)
+                            .allowsHitTesting(false)
+                        }
+                    }
+
+                    // 当前已输入的标签
+                    if !detectedTags.isEmpty {
+                        currentTagsView
+                            .padding()
+                    }
                 }
             }
             .navigationTitle("记录想法")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") {
                         dismiss()
                     }
+                    .foregroundColor(themeManager.currentTheme.colors.secondaryText)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("保存") {
@@ -74,32 +83,43 @@ struct AddIdeaView: View {
                     }
                     .disabled(content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .fontWeight(.semibold)
+                    .foregroundColor(themeManager.currentTheme.colors.accent)
                 }
             }
             .onAppear {
                 isFocused = true
             }
         }
+        .preferredColorScheme(.dark)
     }
 
     private var tagSuggestions: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("快速添加标签")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     // 常用标签
                     ForEach(TagManager.suggestedTags, id: \.self) { tag in
-                        TagChip(tag: tag, isSelected: detectedTags.contains(tag)) {
+                        TagChip(
+                            tag: tag,
+                            isSelected: detectedTags.contains(tag),
+                            theme: themeManager.currentTheme.colors
+                        ) {
                             insertTag(tag)
                         }
                     }
 
                     // 最近使用的标签
                     ForEach(tagManager.recentTags.filter { !TagManager.suggestedTags.contains($0) }.prefix(5), id: \.self) { tag in
-                        TagChip(tag: tag, isSelected: detectedTags.contains(tag), isRecent: true) {
+                        TagChip(
+                            tag: tag,
+                            isSelected: detectedTags.contains(tag),
+                            isRecent: true,
+                            theme: themeManager.currentTheme.colors
+                        ) {
                             insertTag(tag)
                         }
                     }
@@ -112,11 +132,11 @@ struct AddIdeaView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("已添加的标签")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    ForEach(detectedTags, id: \.self) { tag in
+                    ForEach(Array(detectedTags.enumerated()), id: \.offset) { index, tag in
                         HStack(spacing: 4) {
                             Text("#\(tag)")
                                 .font(.subheadline)
@@ -127,14 +147,25 @@ struct AddIdeaView: View {
                             } label: {
                                 Image(systemName: "xmark.circle.fill")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
                             }
                         }
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
-                        .background(Color.blue.opacity(0.15))
-                        .foregroundStyle(.blue)
+                        .background(
+                            themeManager.currentTheme.colors.tagColors[index % themeManager.currentTheme.colors.tagColors.count].opacity(0.2)
+                        )
+                        .foregroundStyle(
+                            themeManager.currentTheme.colors.tagColors[index % themeManager.currentTheme.colors.tagColors.count]
+                        )
                         .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(
+                                    themeManager.currentTheme.colors.tagColors[index % themeManager.currentTheme.colors.tagColors.count].opacity(0.3),
+                                    lineWidth: 1
+                                )
+                        )
                     }
                 }
             }
@@ -186,6 +217,7 @@ struct TagChip: View {
     let tag: String
     let isSelected: Bool
     var isRecent: Bool = false
+    let theme: ThemeColors
     let action: () -> Void
 
     var body: some View {
@@ -200,12 +232,12 @@ struct TagChip: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(isSelected ? Color.blue.opacity(0.15) : Color(.systemGray5))
-            .foregroundStyle(isSelected ? .blue : .primary)
+            .background(isSelected ? theme.accent.opacity(0.2) : theme.secondaryBackground)
+            .foregroundStyle(isSelected ? theme.accent : theme.secondaryText)
             .clipShape(Capsule())
             .overlay(
                 Capsule()
-                    .stroke(isSelected ? Color.blue : Color.clear, lineWidth: 1)
+                    .stroke(isSelected ? theme.accent : theme.borderColor, lineWidth: 1)
             )
         }
         .disabled(isSelected)

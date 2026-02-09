@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickIdea UI 风格 Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            background: #f0f0f0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+            font-size: 36px;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .theme-card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .theme-header {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .theme-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .theme-subtitle {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .theme-content {
+            padding: 20px;
+        }
+
+        .idea-card {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .idea-text {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .idea-time {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        .add-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-button:hover {
+            transform: scale(1.02);
+        }
+
+        /* 风格 A: 极简黑白 */
+        .minimal {
+            background: #FFFFFF;
+        }
+        .minimal .theme-header {
+            background: #F8F8F8;
+            color: #000000;
+        }
+        .minimal .theme-content {
+            background: #FFFFFF;
+        }
+        .minimal .idea-card {
+            background: #F8F8F8;
+            color: #000000;
+        }
+        .minimal .tag {
+            background: rgba(0,0,0,0.1);
+            color: #000000;
+        }
+        .minimal .add-button {
+            background: #000000;
+            color: #FFFFFF;
+        }
+        .minimal .add-button:hover {
+            background: #333333;
+        }
+
+        /* 风格 B: 柔和渐变 */
+        .gradient {
+            background: #F5F7FA;
+        }
+        .gradient .theme-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #FFFFFF;
+        }
+        .gradient .theme-content {
+            background: #F5F7FA;
+        }
+        .gradient .idea-card {
+            background: #FFFFFF;
+            color: #2C3E50;
+            box-shadow: 0 4px 12px rgba(93, 173, 226, 0.1);
+        }
+        .gradient .tag {
+            font-weight: 500;
+        }
+        .gradient .tag:nth-child(1) {
+            background: rgba(162, 155, 254, 0.2);
+            color: #6C5CE7;
+        }
+        .gradient .tag:nth-child(2) {
+            background: rgba(253, 121, 168, 0.2);
+            color: #E84393;
+        }
+        .gradient .tag:nth-child(3) {
+            background: rgba(253, 203, 110, 0.2);
+            color: #E17055;
+        }
+        .gradient .add-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #FFFFFF;
+        }
+
+        /* 风格 C: 活力多彩 */
+        .vibrant {
+            background: #FFFFFF;
+        }
+        .vibrant .theme-header {
+            background: #FFF5F5;
+            color: #1A1A1A;
+        }
+        .vibrant .theme-content {
+            background: #FFFFFF;
+        }
+        .vibrant .idea-card {
+            background: #FFFAFA;
+            color: #1A1A1A;
+            border: 2px solid #FFE0E0;
+        }
+        .vibrant .tag:nth-child(1) {
+            background: rgba(255, 107, 107, 0.2);
+            color: #FF6B6B;
+        }
+        .vibrant .tag:nth-child(2) {
+            background: rgba(78, 205, 196, 0.2);
+            color: #00B894;
+        }
+        .vibrant .tag:nth-child(3) {
+            background: rgba(255, 230, 109, 0.2);
+            color: #FDCB6E;
+        }
+        .vibrant .add-button {
+            background: #FF6B6B;
+            color: #FFFFFF;
+        }
+        .vibrant .add-button:hover {
+            background: #FF5252;
+        }
+
+        /* 风格 D: 复古纸质 */
+        .paper {
+            background: #F4F1E8;
+        }
+        .paper .theme-header {
+            background: #EBE7DC;
+            color: #3E3B32;
+        }
+        .paper .theme-content {
+            background: #F4F1E8;
+        }
+        .paper .idea-card {
+            background: #FFFEF9;
+            color: #3E3B32;
+            box-shadow: 0 2px 8px rgba(62, 59, 50, 0.08);
+        }
+        .paper .tag {
+            background: rgba(184, 149, 106, 0.2);
+            color: #8B7355;
+        }
+        .paper .add-button {
+            background: #B8956A;
+            color: #FFFEF9;
+        }
+        .paper .add-button:hover {
+            background: #A67C52;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .themes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ QuickIdea UI 风格预览</h1>
+
+        <div class="themes-grid">
+            <!-- 风格 A: 极简黑白 -->
+            <div class="theme-card minimal">
+                <div class="theme-header">
+                    <div class="theme-title">极简黑白</div>
+                    <div class="theme-subtitle">Minimal - 专注纯粹</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">+ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 B: 柔和渐变 -->
+            <div class="theme-card gradient">
+                <div class="theme-header">
+                    <div class="theme-title">柔和渐变</div>
+                    <div class="theme-subtitle">Gradient - 舒适护眼</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">+ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 C: 活力多彩 -->
+            <div class="theme-card vibrant">
+                <div class="theme-header">
+                    <div class="theme-title">活力多彩</div>
+                    <div class="theme-subtitle">Vibrant - 充满活力</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">+ 添加想法</button>
+                </div>
+            </div>
+
+            <!-- 风格 D: 复古纸质 -->
+            <div class="theme-card paper">
+                <div class="theme-header">
+                    <div class="theme-title">复古纸质</div>
+                    <div class="theme-subtitle">Paper - 温暖手账</div>
+                </div>
+                <div class="theme-content">
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#工作</span>
+                            <span class="tag">#待办</span>
+                        </div>
+                        <div class="idea-text">完成项目文档</div>
+                        <div class="idea-time">2 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#学习</span>
+                            <span class="tag">#编程</span>
+                        </div>
+                        <div class="idea-text">学习 SwiftUI 动画效果</div>
+                        <div class="idea-time">5 小时前</div>
+                    </div>
+
+                    <div class="idea-card">
+                        <div class="tags">
+                            <span class="tag">#生活</span>
+                        </div>
+                        <div class="idea-text">周末去爬山</div>
+                        <div class="idea-time">1 天前</div>
+                    </div>
+
+                    <button class="add-button">+ 添加想法</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💡 QuickIdea - 选择你喜欢的风格</p>
+            <p style="margin-top: 10px; font-size: 12px;">四种风格各有特色，选定后我会立即应用到项目中</p>
+        </div>
+    </div>
+</body>
+</html>
