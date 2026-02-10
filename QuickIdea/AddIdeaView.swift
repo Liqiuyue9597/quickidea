@@ -7,6 +7,8 @@ struct AddIdeaView: View {
     @StateObject private var tagManager = TagManager.shared
     @EnvironmentObject var themeManager: ThemeManager
 
+    var editingIdea: Idea? = nil
+
     @State private var content = ""
     @FocusState private var isFocused: Bool
 
@@ -65,7 +67,7 @@ struct AddIdeaView: View {
                     }
                 }
             }
-            .navigationTitle("记录想法")
+            .navigationTitle(editingIdea != nil ? "编辑想法" : "记录想法")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -86,6 +88,9 @@ struct AddIdeaView: View {
                 }
             }
             .onAppear {
+                if let idea = editingIdea {
+                    content = idea.content
+                }
                 isFocused = true
             }
         }
@@ -150,20 +155,9 @@ struct AddIdeaView: View {
                         }
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
-                        .background(
-                            themeManager.currentTheme.colors.tagColors[index % themeManager.currentTheme.colors.tagColors.count].opacity(0.2)
-                        )
-                        .foregroundStyle(
-                            themeManager.currentTheme.colors.tagColors[index % themeManager.currentTheme.colors.tagColors.count]
-                        )
+                        .background(themeManager.currentTheme.colors.accent.opacity(0.08))
+                        .foregroundStyle(themeManager.currentTheme.colors.accent)
                         .clipShape(Capsule())
-                        .overlay(
-                            Capsule()
-                                .stroke(
-                                    themeManager.currentTheme.colors.tagColors[index % themeManager.currentTheme.colors.tagColors.count].opacity(0.3),
-                                    lineWidth: 1
-                                )
-                        )
                     }
                 }
             }
@@ -171,12 +165,10 @@ struct AddIdeaView: View {
     }
 
     private func insertTag(_ tag: String) {
-        // 如果已经包含这个标签，不重复添加
         if detectedTags.contains(tag) {
             return
         }
 
-        // 在内容末尾添加标签
         if content.isEmpty {
             content = "#\(tag) "
         } else if content.hasSuffix(" ") {
@@ -187,7 +179,6 @@ struct AddIdeaView: View {
     }
 
     private func removeTag(_ tag: String) {
-        // 移除标签
         content = content.replacingOccurrences(of: "#\(tag)", with: "")
             .replacingOccurrences(of: "  ", with: " ")
             .trimmingCharacters(in: .whitespaces)
@@ -197,16 +188,20 @@ struct AddIdeaView: View {
         let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedContent.isEmpty else { return }
 
-        // 提取标签
         let tags = Idea.extractTags(from: trimmedContent)
 
-        // 创建想法
-        let idea = Idea(content: trimmedContent, tags: tags)
-        modelContext.insert(idea)
+        if let existing = editingIdea {
+            // ✅ 编辑模式：更新内容、标签和修改时间
+            existing.content = trimmedContent
+            existing.tags = tags
+            existing.updatedAt = Date()  // 关键：更新修改时间
+        } else {
+            // 新建模式
+            let idea = Idea(content: trimmedContent, tags: tags)
+            modelContext.insert(idea)
+        }
 
-        // 保存到最近使用的标签
         tagManager.addTags(tags)
-
         dismiss()
     }
 }
@@ -230,13 +225,9 @@ struct TagChip: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(isSelected ? theme.accent.opacity(0.2) : theme.secondaryBackground)
+            .background(isSelected ? theme.accent.opacity(0.08) : theme.secondaryBackground)
             .foregroundStyle(isSelected ? theme.accent : theme.secondaryText)
             .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(isSelected ? theme.accent : theme.borderColor, lineWidth: 1)
-            )
         }
         .disabled(isSelected)
     }
@@ -245,5 +236,6 @@ struct TagChip: View {
 #Preview {
     AddIdeaView()
         .modelContainer(for: Idea.self, inMemory: true)
+        .environmentObject(ThemeManager())
 }
 

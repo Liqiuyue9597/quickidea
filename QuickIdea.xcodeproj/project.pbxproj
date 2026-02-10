@@ -11,6 +11,7 @@
 		14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E113C83826CD681C9D2A80E /* AppDelegate.swift */; };
 		18963261793ED195F6042F29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA98FF3BA1615C154EC363C0 /* Assets.xcassets */; };
 		4D8EE85DD5CF6DD640F9A02D /* QuickIdeaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC189A18AB276A87FC36D0 /* QuickIdeaWidget.swift */; };
+		50D4058B958045998444534B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAA9466B7744BAA2984673 /* Theme.swift */; };
 		80EB35CD4FEE637FE1118175 /* QuickIdeaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 59BFA6CB2901D4E3F8883308 /* QuickIdeaWidgetExtension.appex */; };
 		A668F7EB4D7C61DAF21D3242 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17464B42E3F895CD069085D0 /* Assets.xcassets */; };
 		ED30DF3440B7A05E83FE30F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2313E2C58DE6D83AB10D96 /* Foundation.framework */; };
@@ -19,7 +20,7 @@
 		EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883B2F38EE0E00F1E3AB /* Idea.swift */; };
 		EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */; };
 		EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */; };
-		50D4058B958045998444534B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CAA9466B7744BAA2984673 /* Theme.swift */; };
+		EFEA110C2F3B557000F2C1EF /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEA110B2F3B557000F2C1EF /* AppIconView.swift */; };
 		F5C8302344834CECA2608C12 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A39527F383493691EFC3B2 /* ThemePreviewView.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,12 +49,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00CAA9466B7744BAA2984673 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		17464B42E3F895CD069085D0 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C411CC0026E13CC9DC25F3F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3674B8C7519C15807145ACF1 /* QuickIdea.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickIdea.entitlements; sourceTree = "<group>"; };
 		4A266D426F68741986019CA7 /* QuickIdea.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = QuickIdea.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E0E7FC551F0DF3F62842AF0 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		59BFA6CB2901D4E3F8883308 /* QuickIdeaWidgetExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = QuickIdeaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		65A39527F383493691EFC3B2 /* ThemePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePreviewView.swift; sourceTree = "<group>"; };
 		678E52014465A988F0C9238B /* QuickIdeaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickIdeaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F2313E2C58DE6D83AB10D96 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		7470A29260DF1253F5A7110D /* QuickIdeaWidgetExtension.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = QuickIdeaWidgetExtension.entitlements; sourceTree = "<group>"; };
@@ -66,8 +69,7 @@
 		EFA7883B2F38EE0E00F1E3AB /* Idea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idea.swift; sourceTree = "<group>"; };
 		EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaListView.swift; sourceTree = "<group>"; };
 		EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		00CAA9466B7744BAA2984673 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		65A39527F383493691EFC3B2 /* ThemePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePreviewView.swift; sourceTree = "<group>"; };
+		EFEA110B2F3B557000F2C1EF /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 				3674B8C7519C15807145ACF1 /* QuickIdea.entitlements */,
 				17464B42E3F895CD069085D0 /* Assets.xcassets */,
 				8E113C83826CD681C9D2A80E /* AppDelegate.swift */,
+				EFEA110B2F3B557000F2C1EF /* AppIconView.swift */,
 			);
 			path = QuickIdea;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */,
 				EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */,
 				14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */,
+				EFEA110C2F3B557000F2C1EF /* AppIconView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

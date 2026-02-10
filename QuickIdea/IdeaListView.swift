@@ -3,24 +3,11 @@ import SwiftData
 
 struct IdeaListView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \Idea.createdAt, order: .reverse) private var ideas: [Idea]
-    @State private var showingAddIdea = false
-    @State private var selectedTag: String?
-    @StateObject private var themeManager = ThemeManager()
-
-    // 获取所有使用过的标签
-    private var allTags: [String] {
-        var tags = Set<String>()
-        ideas.forEach { idea in
-            idea.tags.forEach { tags.insert($0) }
-        }
-        return Array(tags).sorted()
-    }
-
-    // 获取每个标签的使用次数
-    private func tagCount(_ tag: String) -> Int {
-        ideas.filter { $0.tags.contains(tag) }.count
-    }
+    // ✅ 按 updatedAt 排序
+    @Query(sort: \Idea.updatedAt, order: .reverse) private var ideas: [Idea]
+    @EnvironmentObject var themeManager: ThemeManager
+    @Binding var selectedTag: String?
+    @State private var editingIdea: Idea?
 
     var filteredIdeas: [Idea] {
         if let tag = selectedTag {
@@ -30,71 +17,20 @@ struct IdeaListView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                // 背景
-                themeManager.currentTheme.colors.background
-                    .ignoresSafeArea()
+        ZStack {
+            themeManager.currentTheme.colors.background
+                .ignoresSafeArea()
 
-                VStack(spacing: 0) {
-                    tagFilter
-
-                    if filteredIdeas.isEmpty {
-                        emptyState
-                    } else {
-                        ideaList
-                    }
-                }
-            }
-            .navigationTitle(selectedTag != nil ? "#\(selectedTag!)" : "我的想法")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingAddIdea = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(themeManager.currentTheme.colors.accent)
-                    }
-                }
-            }
-            .sheet(isPresented: $showingAddIdea) {
-                AddIdeaView()
-                    .environmentObject(themeManager)
+            if filteredIdeas.isEmpty {
+                emptyState
+            } else {
+                ideaList
             }
         }
-    }
-
-    private var tagFilter: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
-                FilterChip(
-                    title: "全部",
-                    count: ideas.count,
-                    isSelected: selectedTag == nil,
-                    theme: themeManager.currentTheme.colors
-                ) {
-                    selectedTag = nil
-                }
-
-                ForEach(allTags, id: \.self) { tag in
-                    FilterChip(
-                        title: "#\(tag)",
-                        count: tagCount(tag),
-                        isSelected: selectedTag == tag,
-                        theme: themeManager.currentTheme.colors
-                    ) {
-                        selectedTag = tag
-                    }
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 12)
+        .sheet(item: $editingIdea) { idea in
+            AddIdeaView(editingIdea: idea)
+                .environmentObject(themeManager)
         }
-        .background(themeManager.currentTheme.colors.background)
     }
 
     private var emptyState: some View {
@@ -132,6 +68,9 @@ struct IdeaListView: View {
             LazyVStack(spacing: 12) {
                 ForEach(filteredIdeas) { idea in
                     IdeaRow(idea: idea, theme: themeManager.currentTheme.colors)
+                        .onTapGesture {
+                            editingIdea = idea
+                        }
                         .contextMenu {
                             Button(role: .destructive) {
                                 deleteIdea(idea)
@@ -167,9 +106,26 @@ struct IdeaRow: View {
     let idea: Idea
     let theme: ThemeColors
 
+    private var formattedDate: String {
+        let calendar = Calendar.current
+        // ✅ 使用 updatedAt 显示最后修改时间
+        let displayDate = idea.updatedAt
+        
+        if calendar.isDateInToday(displayDate) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            return formatter.string(from: displayDate)
+        } else if calendar.isDateInYesterday(displayDate) {
+            return "昨天"
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M月d日"
+            return formatter.string(from: displayDate)
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // 标签行
             if !idea.tags.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 6) {
@@ -179,13 +135,9 @@ struct IdeaRow: View {
                                 .fontWeight(.medium)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 5)
-                                .background(theme.tagColors[index % theme.tagColors.count].opacity(0.2))
-                                .foregroundStyle(theme.tagColors[index % theme.tagColors.count])
+                                .background(theme.accent.opacity(0.08))
+                                .foregroundStyle(theme.accent)
                                 .clipShape(Capsule())
-                                .overlay(
-                                    Capsule()
-                                        .stroke(theme.tagColors[index % theme.tagColors.count].opacity(0.3), lineWidth: 1)
-                                )
                         }
 
                         if idea.isCompleted {
@@ -202,14 +154,13 @@ struct IdeaRow: View {
                 }
             }
 
-            // 内容（移除标签的纯文本）
             Text(idea.cleanContent.isEmpty ? idea.content : idea.cleanContent)
                 .font(.body)
                 .strikethrough(idea.isCompleted)
                 .foregroundStyle(idea.isCompleted ? theme.secondaryText : theme.primaryText)
 
-            // 时间
-            (Text(idea.createdAt, style: .relative) + Text(" 前"))
+            // ✅ 显示修改时间
+            Text(formattedDate)
                 .font(.caption)
                 .foregroundStyle(theme.secondaryText)
         }
@@ -235,24 +186,20 @@ struct FilterChip: View {
                 if let count = count {
                     Text("\(count)")
                         .font(.caption2)
-                        .foregroundStyle(isSelected ? theme.primaryText.opacity(0.8) : theme.secondaryText)
+                        .foregroundStyle(isSelected ? theme.accent.opacity(0.8) : theme.secondaryText)
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
-            .background(isSelected ? theme.accent.opacity(0.3) : theme.secondaryBackground)
-            .foregroundStyle(isSelected ? theme.primaryText : theme.secondaryText)
+            .background(isSelected ? theme.accent.opacity(0.08) : theme.secondaryBackground)
+            .foregroundStyle(isSelected ? theme.accent : theme.secondaryText)
             .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(isSelected ? theme.accent : theme.borderColor, lineWidth: 1)
-            )
         }
     }
 }
 
 #Preview {
-    IdeaListView()
+    IdeaListView(selectedTag: .constant(nil))
         .modelContainer(for: Idea.self, inMemory: true)
+        .environmentObject(ThemeManager())
 }
-

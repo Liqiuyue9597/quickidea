@@ -26,13 +26,16 @@ final class Idea {
     var content: String
     var tags: [String]
     var createdAt: Date
+    var updatedAt: Date  // ✅ 新增字段
     var isCompleted: Bool
 
     init(content: String, tags: [String] = []) {
         self.id = UUID()
         self.content = content
         self.tags = tags
-        self.createdAt = Date()
+        let now = Date()
+        self.createdAt = now
+        self.updatedAt = now  // ✅ 初始化时两个时间相同
         self.isCompleted = false
     }
 
@@ -40,9 +43,9 @@ final class Idea {
     init(from oldIdea: IdeaV1) {
         self.id = oldIdea.id
         self.content = oldIdea.content
-        // 将旧的 category 转换为标签数组
         self.tags = [oldIdea.category]
         self.createdAt = oldIdea.createdAt
+        self.updatedAt = oldIdea.createdAt  // ✅ 迁移时使用创建时间
         self.isCompleted = oldIdea.isCompleted
     }
 

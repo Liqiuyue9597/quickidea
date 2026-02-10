@@ -27,45 +27,42 @@ protocol ThemeColors {
     var glassBlur: CGFloat { get }
 }
 
-// MARK: - Glassmorphism 主题（Flomo 风格 - 柔和浅色）
+// MARK: - Refined Flomo 主题（扁平、单色强调）
 struct GlassmorphismTheme: ThemeColors {
-    // Flomo 风格的浅色背景
-    var background = Color(hex: "f7f7f7")
+    // 温暖灰色背景
+    var background = Color(hex: "f2f2f2")
 
-    // 半透明次要背景（毛玻璃效果）
-    var secondaryBackground = Color(hex: "ffffff").opacity(0.7)
+    // 纯白次要背景（不透明）
+    var secondaryBackground = Color(hex: "ffffff")
 
-    // 半透明卡片背景（毛玻璃效果）- 白色带透明
-    var cardBackground = Color(hex: "ffffff").opacity(0.9)
+    // 纯白卡片背景（不透明）
+    var cardBackground = Color(hex: "ffffff")
 
     // 主文字（深灰）
-    var primaryText = Color(hex: "2c2c2c")
+    var primaryText = Color(hex: "333333")
 
     // 次要文字（中灰）
-    var secondaryText = Color(hex: "8e8e93")
+    var secondaryText = Color(hex: "888888")
 
-    // 强调色（Flomo 蓝）
-    var accent = Color(hex: "4a90e2")
+    // 强调色（Flomo 绿）
+    var accent = Color(hex: "30cf79")
 
-    // 标签颜色（柔和的彩色系）
+    // 标签颜色（统一使用强调绿）
     var tagColors = [
-        Color(hex: "4a90e2"),  // 蓝色
-        Color(hex: "9b59b6"),  // 紫色
-        Color(hex: "27ae60"),  // 绿色
-        Color(hex: "e67e22")   // 橙色
+        Color(hex: "30cf79")
     ]
 
     // 阴影颜色（极浅）
-    var shadowColor = Color.black.opacity(0.08)
+    var shadowColor = Color.black.opacity(0.04)
 
     // 分隔线颜色
-    var divider = Color(hex: "e5e5ea")
+    var divider = Color.black.opacity(0.05)
 
-    // 边框颜色（浅灰）
-    var borderColor = Color(hex: "e5e5ea").opacity(0.6)
+    // 边框颜色（透明，无边框）
+    var borderColor = Color.clear
 
-    // 模糊程度
-    var glassBlur: CGFloat = 20
+    // 模糊程度（无模糊）
+    var glassBlur: CGFloat = 0
 }
 
 // MARK: - Color Extension (Hex 支持)
@@ -111,21 +108,15 @@ class ThemeManager: ObservableObject {
     }
 }
 
-// MARK: - 毛玻璃效果视图修饰符
+// MARK: - 卡片效果视图修饰符
 struct GlassEffect: ViewModifier {
     let theme: ThemeColors
 
     func body(content: Content) -> some View {
         content
-            .background(
-                theme.cardBackground
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(theme.borderColor, lineWidth: 1)
-                    )
-            )
-            .cornerRadius(16)
-            .shadow(color: theme.shadowColor, radius: 15, y: 5)
+            .background(theme.cardBackground)
+            .cornerRadius(8)
+            .shadow(color: theme.shadowColor, radius: 2, y: 1)
     }
 }
 

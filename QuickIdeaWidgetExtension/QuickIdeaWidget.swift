@@ -140,24 +140,33 @@ struct QuickIdeaWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: Provider.Entry
 
+    // Refined Flomo 主题色
+    private let accentColor = Color(red: 0x30/255, green: 0xcf/255, blue: 0x79/255) // #30cf79
+    private let widgetBackground = Color(red: 0xf2/255, green: 0xf2/255, blue: 0xf2/255) // #f2f2f2
+
     var body: some View {
-        if entry.ideas.isEmpty {
-            emptyView
-        } else {
-            switch widgetFamily {
-            case .accessoryCircular:
-                circularView
-            case .accessoryRectangular:
-                rectangularView
-            case .accessoryInline:
-                inlineView
-            case .systemSmall:
-                smallWidgetView
-            case .systemMedium:
-                mediumWidgetView
-            default:
-                smallWidgetView
+        Group {
+            if entry.ideas.isEmpty {
+                emptyView
+            } else {
+                switch widgetFamily {
+                case .accessoryCircular:
+                    circularView
+                case .accessoryRectangular:
+                    rectangularView
+                case .accessoryInline:
+                    inlineView
+                case .systemSmall:
+                    smallWidgetView
+                case .systemMedium:
+                    mediumWidgetView
+                default:
+                    smallWidgetView
+                }
             }
+        }
+        .containerBackground(for: .widget) {
+            widgetBackground
         }
     }
 
@@ -226,7 +235,7 @@ struct QuickIdeaWidgetEntryView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "lightbulb.fill")
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(accentColor)
                 Text("我的想法")
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -237,17 +246,15 @@ struct QuickIdeaWidgetEntryView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     // 显示标签
                     if !idea.tags.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 6) {
-                                ForEach(idea.tags.prefix(2), id: \.self) { tag in
-                                    Text("#\(tag)")
-                                        .font(.caption2)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 4)
-                                        .background(Color.blue.opacity(0.2))
-                                        .foregroundStyle(.blue)
-                                        .clipShape(Capsule())
-                                }
+                        HStack(spacing: 6) {
+                            ForEach(idea.tags.prefix(2), id: \.self) { tag in
+                                Text("#\(tag)")
+                                    .font(.caption2)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(accentColor.opacity(0.08))
+                                    .foregroundStyle(accentColor)
+                                    .clipShape(Capsule())
                             }
                         }
                     }
@@ -266,16 +273,13 @@ struct QuickIdeaWidgetEntryView: View {
             }
         }
         .padding()
-        .containerBackground(for: .widget) {
-            Color(.systemBackground)
-        }
     }
 
     private var mediumWidgetView: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "lightbulb.fill")
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(accentColor)
                 Text("我的想法")
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -292,26 +296,21 @@ struct QuickIdeaWidgetEntryView: View {
             }
         }
         .padding()
-        .containerBackground(for: .widget) {
-            Color(.systemBackground)
-        }
     }
 
     private func singleIdeaView(idea: Idea) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             // 标签
             if !idea.tags.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 6) {
-                        ForEach(idea.tags.prefix(3), id: \.self) { tag in
-                            Text("#\(tag)")
-                                .font(.caption)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(Color.blue.opacity(0.2))
-                                .foregroundStyle(.blue)
-                                .clipShape(Capsule())
-                        }
+                HStack(spacing: 6) {
+                    ForEach(idea.tags.prefix(3), id: \.self) { tag in
+                        Text("#\(tag)")
+                            .font(.caption)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(accentColor.opacity(0.08))
+                            .foregroundStyle(accentColor)
+                            .clipShape(Capsule())
                     }
                 }
             }
@@ -324,9 +323,24 @@ struct QuickIdeaWidgetEntryView: View {
             Spacer()
 
             // 时间
-            Text(idea.createdAt, style: .relative) + Text(" 前")
+            Text(shortDateString(idea.createdAt))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+        }
+    }
+
+    private func shortDateString(_ date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "HH:mm"
+            return formatter.string(from: date)
+        } else if calendar.isDateInYesterday(date) {
+            return "昨天"
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M月d日"
+            return formatter.string(from: date)
         }
     }
 
@@ -339,13 +353,13 @@ struct QuickIdeaWidgetEntryView: View {
                         Text("#")
                             .font(.title3)
                             .fontWeight(.semibold)
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(accentColor)
                     } else {
                         Text("\(index + 1)")
                             .font(.caption)
                             .fontWeight(.semibold)
                             .frame(width: 20, height: 20)
-                            .background(Color.blue.opacity(0.2))
+                            .background(accentColor.opacity(0.08))
                             .clipShape(Circle())
                     }
 
