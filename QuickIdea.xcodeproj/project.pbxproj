@@ -20,7 +20,6 @@
 		EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883B2F38EE0E00F1E3AB /* Idea.swift */; };
 		EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */; };
 		EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */; };
-		EFEA110C2F3B557000F2C1EF /* AppIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEA110B2F3B557000F2C1EF /* AppIconView.swift */; };
 		F5C8302344834CECA2608C12 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A39527F383493691EFC3B2 /* ThemePreviewView.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +68,6 @@
 		EFA7883B2F38EE0E00F1E3AB /* Idea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idea.swift; sourceTree = "<group>"; };
 		EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaListView.swift; sourceTree = "<group>"; };
 		EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		EFEA110B2F3B557000F2C1EF /* AppIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +133,6 @@
 				3674B8C7519C15807145ACF1 /* QuickIdea.entitlements */,
 				17464B42E3F895CD069085D0 /* Assets.xcassets */,
 				8E113C83826CD681C9D2A80E /* AppDelegate.swift */,
-				EFEA110B2F3B557000F2C1EF /* AppIconView.swift */,
 			);
 			path = QuickIdea;
 			sourceTree = "<group>";
@@ -274,7 +271,6 @@
 				EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */,
 				EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */,
 				14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */,
-				EFEA110C2F3B557000F2C1EF /* AppIconView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
