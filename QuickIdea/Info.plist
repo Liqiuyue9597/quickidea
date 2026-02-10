@@ -60,5 +60,11 @@
 	<array>
 		<string>QuickIdeaIntent</string>
 	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>QuickIdea 需要使用麦克风来录制语音，帮助你快速记录灵感</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>QuickIdea 需要使用语音识别功能，将你的语音转换为文字</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>QuickIdea 需要访问你的相册来添加图片到灵感中</string>
 </dict>
 </plist>

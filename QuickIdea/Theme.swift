@@ -27,15 +27,15 @@ protocol ThemeColors {
     var glassBlur: CGFloat { get }
 }
 
-// MARK: - Refined Flomo 主题（扁平、单色强调）
+// MARK: - QuickIdea 主题（灵感橙黄配色）
 struct GlassmorphismTheme: ThemeColors {
-    // 温暖灰色背景
-    var background = Color(hex: "f2f2f2")
+    // 温暖浅米色背景
+    var background = Color(hex: "f8f7f4")
 
-    // 纯白次要背景（不透明）
+    // 纯白次要背景
     var secondaryBackground = Color(hex: "ffffff")
 
-    // 纯白卡片背景（不透明）
+    // 纯白卡片背景
     var cardBackground = Color(hex: "ffffff")
 
     // 主文字（深灰）
@@ -44,12 +44,12 @@ struct GlassmorphismTheme: ThemeColors {
     // 次要文字（中灰）
     var secondaryText = Color(hex: "888888")
 
-    // 强调色（Flomo 绿）
-    var accent = Color(hex: "30cf79")
+    // 强调色（灵感橙黄）
+    var accent = Color(hex: "FFB84D")
 
-    // 标签颜色（统一使用强调绿）
+    // 标签颜色（统一使用橙黄）
     var tagColors = [
-        Color(hex: "30cf79")
+        Color(hex: "FFB84D")
     ]
 
     // 阴影颜色（极浅）
@@ -58,7 +58,7 @@ struct GlassmorphismTheme: ThemeColors {
     // 分隔线颜色
     var divider = Color.black.opacity(0.05)
 
-    // 边框颜色（透明，无边框）
+    // 边框颜色（透明）
     var borderColor = Color.clear
 
     // 模糊程度（无模糊）

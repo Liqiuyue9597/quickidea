@@ -67,50 +67,67 @@ struct IdeaListView: View {
         ScrollView {
             LazyVStack(spacing: 12) {
                 ForEach(filteredIdeas) { idea in
-                    IdeaRow(idea: idea, theme: themeManager.currentTheme.colors)
-                        .onTapGesture {
-                            editingIdea = idea
-                        }
-                        .contextMenu {
-                            Button(role: .destructive) {
-                                deleteIdea(idea)
-                            } label: {
-                                Label("删除", systemImage: "trash")
+                    IdeaRow(idea: idea, theme: themeManager.currentTheme.colors) { newStatus in
+                        changeStatus(idea, to: newStatus)
+                    }
+                    .onTapGesture {
+                        editingIdea = idea
+                    }
+                    .contextMenu {
+                        // 状态切换菜单
+                        Menu {
+                            ForEach(IdeaStatus.allCases, id: \.self) { status in
+                                if status != idea.status {
+                                    Button {
+                                        changeStatus(idea, to: status)
+                                    } label: {
+                                        Label(status.rawValue, systemImage: status.icon)
+                                    }
+                                }
                             }
+                        } label: {
+                            Label("更改状态", systemImage: "arrow.left.arrow.right")
+                        }
 
-                            Button {
-                                toggleComplete(idea)
-                            } label: {
-                                Label(
-                                    idea.isCompleted ? "取消完成" : "完成",
-                                    systemImage: idea.isCompleted ? "arrow.uturn.backward" : "checkmark"
-                                )
-                            }
+                        Divider()
+
+                        Button(role: .destructive) {
+                            deleteIdea(idea)
+                        } label: {
+                            Label("删除", systemImage: "trash")
                         }
+                    }
                 }
             }
-            .padding()
+            .padding(.top, 8)
         }
+    }
+
+    private func changeStatus(_ idea: Idea, to status: IdeaStatus) {
+        withAnimation {
+            idea.status = status
+        }
+        // 刷新 Widget（状态改变可能影响"未处理"数量）
+        WidgetRefreshManager.shared.reloadAllWidgets()
     }
 
     private func deleteIdea(_ idea: Idea) {
         modelContext.delete(idea)
-    }
-
-    private func toggleComplete(_ idea: Idea) {
-        idea.isCompleted.toggle()
+        // 刷新 Widget
+        WidgetRefreshManager.shared.reloadAllWidgets()
     }
 }
 
 struct IdeaRow: View {
     let idea: Idea
     let theme: ThemeColors
+    @State private var offset: CGFloat = 0
+    let onStatusChange: (IdeaStatus) -> Void
 
     private var formattedDate: String {
         let calendar = Calendar.current
-        // ✅ 使用 updatedAt 显示最后修改时间
         let displayDate = idea.updatedAt
-        
+
         if calendar.isDateInToday(displayDate) {
             let formatter = DateFormatter()
             formatter.dateFormat = "HH:mm"
@@ -125,47 +142,162 @@ struct IdeaRow: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if !idea.tags.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 6) {
-                        ForEach(Array(idea.tags.enumerated()), id: \.offset) { index, tag in
-                            Text("#\(tag)")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(theme.accent.opacity(0.08))
-                                .foregroundStyle(theme.accent)
-                                .clipShape(Capsule())
-                        }
+        ZStack {
+            // 背景手势提示
+            HStack {
+                // 左滑：标记进行中
+                if offset < 0 {
+                    Spacer()
+                    VStack(spacing: 4) {
+                        Image(systemName: IdeaStatus.inProgress.icon)
+                            .font(.title3)
+                        Text("进行中")
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundStyle(.white)
+                    .frame(width: -offset * 0.5)
+                    .padding(.trailing, 16)
+                }
 
-                        if idea.isCompleted {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(theme.accent)
-                                .font(.caption)
+                // 右滑：标记完成
+                if offset > 0 {
+                    VStack(spacing: 4) {
+                        Image(systemName: IdeaStatus.completed.icon)
+                            .font(.title3)
+                        Text("完成")
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundStyle(.white)
+                    .frame(width: offset * 0.5)
+                    .padding(.leading, 16)
+                    Spacer()
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .background(
+                offset > 0
+                    ? Color(hex: IdeaStatus.completed.color)
+                    : Color(hex: IdeaStatus.inProgress.color)
+            )
+            .cornerRadius(12)
+
+            // 主卡片内容
+            cardContent
+                .background(theme.cardBackground)
+                .cornerRadius(12)
+                .shadow(color: theme.shadowColor, radius: 2, y: 1)
+                .offset(x: offset)
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            // 限制滑动范围
+                            if abs(value.translation.width) < 120 {
+                                offset = value.translation.width
+                            }
+                        }
+                        .onEnded { value in
+                            withAnimation(.spring(response: 0.3)) {
+                                if value.translation.width > 80 {
+                                    // 右滑超过阈值：标记完成
+                                    onStatusChange(.completed)
+                                    offset = 0
+                                } else if value.translation.width < -80 {
+                                    // 左滑超过阈值：标记进行中
+                                    onStatusChange(.inProgress)
+                                    offset = 0
+                                } else {
+                                    // 未达到阈值：回弹
+                                    offset = 0
+                                }
+                            }
+                        }
+                )
+        }
+        .padding(.horizontal)
+    }
+
+    private var cardContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // 标签和状态
+            HStack(spacing: 8) {
+                if !idea.tags.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 6) {
+                            ForEach(Array(idea.tags.enumerated()), id: \.offset) { index, tag in
+                                Text("#\(tag)")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(Color(hex: idea.status.color).opacity(0.08))
+                                    .foregroundStyle(Color(hex: idea.status.color))
+                                    .clipShape(Capsule())
+                            }
                         }
                     }
                 }
-            } else if idea.isCompleted {
-                HStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(theme.accent)
+
+                Spacer()
+
+                // 状态图标
+                HStack(spacing: 4) {
+                    Image(systemName: idea.status.icon)
+                        .font(.caption)
+                    Text(idea.status.rawValue)
+                        .font(.caption2)
+                }
+                .foregroundStyle(Color(hex: idea.status.color))
+            }
+
+            // 内容
+            Text(idea.cleanContent.isEmpty ? idea.content : idea.cleanContent)
+                .font(.body)
+                .strikethrough(idea.status == .completed || idea.status == .archived)
+                .foregroundStyle(
+                    idea.status == .completed || idea.status == .archived
+                        ? theme.secondaryText
+                        : theme.primaryText
+                )
+                .lineLimit(3)
+
+            // 图片预览
+            if !idea.imageData.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(Array(idea.imageData.prefix(3).enumerated()), id: \.offset) { index, data in
+                            if let image = UIImage(data: data) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 60, height: 60)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
+                        }
+
+                        if idea.imageData.count > 3 {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(theme.secondaryBackground)
+                                    .frame(width: 60, height: 60)
+
+                                Text("+\(idea.imageData.count - 3)")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(theme.secondaryText)
+                            }
+                        }
+                    }
                 }
             }
 
-            Text(idea.cleanContent.isEmpty ? idea.content : idea.cleanContent)
-                .font(.body)
-                .strikethrough(idea.isCompleted)
-                .foregroundStyle(idea.isCompleted ? theme.secondaryText : theme.primaryText)
-
-            // ✅ 显示修改时间
+            // 时间
             Text(formattedDate)
                 .font(.caption)
                 .foregroundStyle(theme.secondaryText)
         }
         .padding(16)
-        .glassCard(theme: theme)
     }
 }
 

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct AddIdeaView: View {
     @Environment(\.modelContext) private var modelContext
@@ -10,6 +11,8 @@ struct AddIdeaView: View {
     var editingIdea: Idea? = nil
 
     @State private var content = ""
+    @State private var selectedPhotos: [PhotosPickerItem] = []
+    @State private var selectedImages: [UIImage] = []
     @FocusState private var isFocused: Bool
 
     // 实时提取的标签
@@ -65,6 +68,74 @@ struct AddIdeaView: View {
                         currentTagsView
                             .padding()
                     }
+
+                    // 图片选择和预览
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            PhotosPicker(selection: $selectedPhotos, maxSelectionCount: 5, matching: .images) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "photo.on.rectangle.angled")
+                                        .font(.subheadline)
+                                    Text("添加图片")
+                                        .font(.subheadline)
+                                }
+                                .foregroundStyle(themeManager.currentTheme.colors.accent)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(themeManager.currentTheme.colors.accent.opacity(0.08))
+                                .clipShape(Capsule())
+                            }
+                            .onChange(of: selectedPhotos) { _, newItems in
+                                Task {
+                                    selectedImages = []
+                                    for item in newItems {
+                                        if let data = try? await item.loadTransferable(type: Data.self),
+                                           let image = UIImage(data: data) {
+                                            selectedImages.append(image)
+                                        }
+                                    }
+                                }
+                            }
+
+                            if !selectedImages.isEmpty {
+                                Text("\(selectedImages.count) 张图片")
+                                    .font(.caption)
+                                    .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                            }
+
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+
+                        // 图片预览
+                        if !selectedImages.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 12) {
+                                    ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
+                                        ZStack(alignment: .topTrailing) {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 100, height: 100)
+                                                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                                            Button {
+                                                selectedImages.remove(at: index)
+                                                selectedPhotos.remove(at: index)
+                                            } label: {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .font(.title3)
+                                                    .foregroundStyle(.white)
+                                                    .background(Circle().fill(Color.black.opacity(0.5)))
+                                            }
+                                            .padding(4)
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
+                        }
+                    }
                 }
             }
             .navigationTitle(editingIdea != nil ? "编辑想法" : "记录想法")
@@ -90,6 +161,8 @@ struct AddIdeaView: View {
             .onAppear {
                 if let idea = editingIdea {
                     content = idea.content
+                    // 加载已有图片
+                    selectedImages = idea.imageData.compactMap { UIImage(data: $0) }
                 }
                 isFocused = true
             }
@@ -189,19 +262,25 @@ struct AddIdeaView: View {
         guard !trimmedContent.isEmpty else { return }
 
         let tags = Idea.extractTags(from: trimmedContent)
+        let imageDataArray = selectedImages.compactMap { $0.jpegData(compressionQuality: 0.8) }
 
         if let existing = editingIdea {
-            // ✅ 编辑模式：更新内容、标签和修改时间
+            // 编辑模式：更新内容、标签、图片和修改时间
             existing.content = trimmedContent
             existing.tags = tags
-            existing.updatedAt = Date()  // 关键：更新修改时间
+            existing.imageData = imageDataArray
+            existing.updatedAt = Date()
         } else {
             // 新建模式
-            let idea = Idea(content: trimmedContent, tags: tags)
+            let idea = Idea(content: trimmedContent, tags: tags, imageData: imageDataArray)
             modelContext.insert(idea)
         }
 
         tagManager.addTags(tags)
+
+        // 刷新 Widget
+        WidgetRefreshManager.shared.reloadAllWidgets()
+
         dismiss()
     }
 }

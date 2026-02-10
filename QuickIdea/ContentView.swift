@@ -3,13 +3,18 @@ import SwiftData
 
 struct ContentView: View {
     @StateObject private var themeManager = ThemeManager()
+    @StateObject private var speechRecognizer = SpeechRecognizer()
+    @StateObject private var notificationManager = NotificationManager.shared
     @EnvironmentObject var store: IdeaStore
-    // 改为按 updatedAt 排序
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \Idea.updatedAt, order: .reverse) private var ideas: [Idea]
 
     @State private var selectedTag: String?
     @State private var showSidebar = false
-    @State private var showingAddIdea = false
+    @State private var quickInputText = ""
+    @State private var showingSpeechSheet = false
+    @State private var showingNotificationSettings = false
+    @FocusState private var isInputFocused: Bool
 
     // 获取所有使用过的标签
     private var allTags: [String] {
@@ -25,16 +30,24 @@ struct ContentView: View {
         ideas.filter { $0.tags.contains(tag) }.count
     }
 
-    // 已完成的数量
-    private var completedCount: Int {
-        ideas.filter { $0.isCompleted }.count
+    // 未处理灵感数量
+    private var pendingCount: Int {
+        ideas.filter { $0.status == .pending }.count
     }
 
     var body: some View {
         NavigationStack {
             ZStack {
-                // 主内容
-                IdeaListView(selectedTag: $selectedTag)
+                themeManager.currentTheme.colors.background
+                    .ignoresSafeArea()
+
+                VStack(spacing: 0) {
+                    // 快速输入区域
+                    quickInputBar
+
+                    // 主内容列表
+                    IdeaListView(selectedTag: $selectedTag)
+                }
 
                 // 侧栏遮罩
                 if showSidebar {
@@ -57,7 +70,7 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-            .navigationTitle(selectedTag != nil ? "#\(selectedTag!)" : "我的想法")
+            .navigationTitle(selectedTag != nil ? "#\(selectedTag!)" : "我的灵感")
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(themeManager.currentTheme.colors.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -73,23 +86,123 @@ struct ContentView: View {
                             .foregroundColor(themeManager.currentTheme.colors.primaryText)
                     }
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingAddIdea = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(themeManager.currentTheme.colors.accent)
-                    }
-                }
-            }
-            .sheet(isPresented: $showingAddIdea) {
-                AddIdeaView()
-                    .environmentObject(themeManager)
             }
         }
         .environmentObject(themeManager)
         .accentColor(themeManager.currentTheme.colors.accent)
+        .sheet(isPresented: $showingNotificationSettings) {
+            NotificationSettingsView(notificationManager: notificationManager)
+                .environmentObject(themeManager)
+        }
+        .onAppear {
+            // 初始化通知
+            notificationManager.scheduleNotifications(with: modelContext)
+        }
+    }
+
+    // MARK: - 快速输入栏
+    private var quickInputBar: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                // 灵感图标
+                Image(systemName: "lightbulb.fill")
+                    .font(.title2)
+                    .foregroundStyle(themeManager.currentTheme.colors.accent)
+
+                // 输入框
+                TextField("记录新灵感...", text: $quickInputText)
+                    .focused($isInputFocused)
+                    .font(.body)
+                    .foregroundColor(themeManager.currentTheme.colors.primaryText)
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 16)
+                    .background(themeManager.currentTheme.colors.secondaryBackground)
+                    .cornerRadius(12)
+                    .onSubmit {
+                        saveQuickIdea()
+                    }
+
+                // 快捷按钮
+                HStack(spacing: 8) {
+                    Button {
+                        showingSpeechSheet = true
+                    } label: {
+                        Image(systemName: "mic.fill")
+                            .font(.title3)
+                            .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                    }
+
+                    Button {
+                        // 图片添加功能（后续实现）
+                    } label: {
+                        Image(systemName: "photo")
+                            .font(.title3)
+                            .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top, 8)
+
+            // 快捷标签
+            if !TagManager.suggestedTags.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(TagManager.suggestedTags, id: \.self) { tag in
+                            Button {
+                                insertQuickTag(tag)
+                            } label: {
+                                Text("#\(tag)")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(themeManager.currentTheme.colors.accent.opacity(0.08))
+                                    .foregroundStyle(themeManager.currentTheme.colors.accent)
+                                    .clipShape(Capsule())
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+            }
+        }
+        .padding(.bottom, 12)
+        .background(themeManager.currentTheme.colors.background)
+        .sheet(isPresented: $showingSpeechSheet) {
+            SpeechInputView(speechRecognizer: speechRecognizer) { transcribedText in
+                quickInputText = transcribedText
+                showingSpeechSheet = false
+                isInputFocused = true
+            }
+            .environmentObject(themeManager)
+        }
+    }
+
+    private func insertQuickTag(_ tag: String) {
+        if quickInputText.isEmpty {
+            quickInputText = "#\(tag) "
+        } else if quickInputText.hasSuffix(" ") {
+            quickInputText += "#\(tag) "
+        } else {
+            quickInputText += " #\(tag) "
+        }
+        isInputFocused = true
+    }
+
+    private func saveQuickIdea() {
+        let trimmed = quickInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+
+        let tags = Idea.extractTags(from: trimmed)
+        let idea = Idea(content: trimmed, tags: tags)
+        modelContext.insert(idea)
+
+        TagManager.shared.addTags(tags)
+        quickInputText = ""
+
+        // 刷新 Widget
+        WidgetRefreshManager.shared.reloadAllWidgets()
     }
 
     // MARK: - 侧栏内容
@@ -103,23 +216,23 @@ struct ContentView: View {
                     .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
                     .textCase(.uppercase)
 
-                HStack(spacing: 24) {
+                HStack(spacing: 16) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(ideas.count)")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(themeManager.currentTheme.colors.primaryText)
-                        Text("全部想法")
+                        Text("全部灵感")
                             .font(.caption)
                             .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
                     }
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\(completedCount)")
+                        Text("\(pendingCount)")
                             .font(.title2)
                             .fontWeight(.bold)
                             .foregroundColor(themeManager.currentTheme.colors.accent)
-                        Text("已完成")
+                        Text("未处理")
                             .font(.caption)
                             .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
                     }
@@ -175,6 +288,41 @@ struct ContentView: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
                     .textCase(.uppercase)
+
+                // 通知提醒设置
+                Button {
+                    showingNotificationSettings = true
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showSidebar = false
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "bell.badge.fill")
+                            .foregroundStyle(themeManager.currentTheme.colors.accent)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("通知提醒")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundStyle(themeManager.currentTheme.colors.primaryText)
+
+                            Text(notificationManager.isEnabled ? "已开启" : "未开启")
+                                .font(.caption2)
+                                .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(themeManager.currentTheme.colors.secondaryText)
+                    }
+                    .padding(.vertical, 8)
+                }
+
+                Divider()
+                    .background(themeManager.currentTheme.colors.divider)
+                    .padding(.vertical, 4)
 
                 // 小组件显示方式
                 VStack(alignment: .leading, spacing: 8) {

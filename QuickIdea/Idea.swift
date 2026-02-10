@@ -19,6 +19,32 @@ final class IdeaV1 {
     }
 }
 
+// 灵感状态枚举
+enum IdeaStatus: String, Codable, CaseIterable {
+    case pending = "未处理"
+    case inProgress = "进行中"
+    case completed = "已完成"
+    case archived = "已放弃"
+
+    var icon: String {
+        switch self {
+        case .pending: return "lightbulb"
+        case .inProgress: return "arrow.forward.circle"
+        case .completed: return "checkmark.circle.fill"
+        case .archived: return "archivebox"
+        }
+    }
+
+    var color: String {
+        switch self {
+        case .pending: return "FFB84D" // 橙黄色
+        case .inProgress: return "5B9BD5" // 蓝色
+        case .completed: return "30cf79" // 绿色
+        case .archived: return "888888" // 灰色
+        }
+    }
+}
+
 // 版本 2 (当前模型)
 @Model
 final class Idea {
@@ -26,17 +52,36 @@ final class Idea {
     var content: String
     var tags: [String]
     var createdAt: Date
-    var updatedAt: Date  // ✅ 新增字段
-    var isCompleted: Bool
+    var updatedAt: Date
+    var statusRaw: String
+    @Attribute(.externalStorage) var imageData: [Data]  // 存储图片数据
 
-    init(content: String, tags: [String] = []) {
+    // 计算属性，用于方便访问状态
+    var status: IdeaStatus {
+        get {
+            IdeaStatus(rawValue: statusRaw) ?? .pending
+        }
+        set {
+            statusRaw = newValue.rawValue
+            updatedAt = Date()
+        }
+    }
+
+    // 兼容旧代码的计算属性
+    var isCompleted: Bool {
+        get { status == .completed }
+        set { status = newValue ? .completed : .pending }
+    }
+
+    init(content: String, tags: [String] = [], status: IdeaStatus = .pending, imageData: [Data] = []) {
         self.id = UUID()
         self.content = content
         self.tags = tags
         let now = Date()
         self.createdAt = now
-        self.updatedAt = now  // ✅ 初始化时两个时间相同
-        self.isCompleted = false
+        self.updatedAt = now
+        self.statusRaw = status.rawValue
+        self.imageData = imageData
     }
 
     // 从旧模型迁移
@@ -45,8 +90,9 @@ final class Idea {
         self.content = oldIdea.content
         self.tags = [oldIdea.category]
         self.createdAt = oldIdea.createdAt
-        self.updatedAt = oldIdea.createdAt  // ✅ 迁移时使用创建时间
-        self.isCompleted = oldIdea.isCompleted
+        self.updatedAt = oldIdea.createdAt
+        self.statusRaw = oldIdea.isCompleted ? IdeaStatus.completed.rawValue : IdeaStatus.pending.rawValue
+        self.imageData = []
     }
 
     // 从内容中提取标签（# 开头的词）

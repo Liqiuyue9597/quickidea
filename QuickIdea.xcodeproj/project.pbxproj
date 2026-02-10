@@ -20,6 +20,11 @@
 		EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883B2F38EE0E00F1E3AB /* Idea.swift */; };
 		EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */; };
 		EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */; };
+		EFA788472F3B951B00F1E3AB /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA788442F3B951B00F1E3AB /* NotificationSettingsView.swift */; };
+		EFA788482F3B951B00F1E3AB /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA788432F3B951B00F1E3AB /* NotificationManager.swift */; };
+		EFA788492F3B951B00F1E3AB /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA788462F3B951B00F1E3AB /* SpeechRecognizer.swift */; };
+		EFA7884A2F3B951B00F1E3AB /* SpeechInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA788452F3B951B00F1E3AB /* SpeechInputView.swift */; };
+		EFA7884C2F3B9A8C00F1E3AB /* WidgetRefreshManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA7884B2F3B9A8C00F1E3AB /* WidgetRefreshManager.swift */; };
 		F5C8302344834CECA2608C12 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A39527F383493691EFC3B2 /* ThemePreviewView.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +73,11 @@
 		EFA7883B2F38EE0E00F1E3AB /* Idea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Idea.swift; sourceTree = "<group>"; };
 		EFA7883C2F38EE0E00F1E3AB /* IdeaListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaListView.swift; sourceTree = "<group>"; };
 		EFA7883D2F38EE0E00F1E3AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		EFA788432F3B951B00F1E3AB /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		EFA788442F3B951B00F1E3AB /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
+		EFA788452F3B951B00F1E3AB /* SpeechInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechInputView.swift; sourceTree = "<group>"; };
+		EFA788462F3B951B00F1E3AB /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
+		EFA7884B2F3B9A8C00F1E3AB /* WidgetRefreshManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetRefreshManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +132,11 @@
 		8D95F3A249413E19E51BF9D8 /* QuickIdea */ = {
 			isa = PBXGroup;
 			children = (
+				EFA7884B2F3B9A8C00F1E3AB /* WidgetRefreshManager.swift */,
+				EFA788432F3B951B00F1E3AB /* NotificationManager.swift */,
+				EFA788442F3B951B00F1E3AB /* NotificationSettingsView.swift */,
+				EFA788452F3B951B00F1E3AB /* SpeechInputView.swift */,
+				EFA788462F3B951B00F1E3AB /* SpeechRecognizer.swift */,
 				EFA788392F38EE0E00F1E3AB /* AddIdeaView.swift */,
 				EFA7883A2F38EE0E00F1E3AB /* ContentView.swift */,
 				EFA7883B2F38EE0E00F1E3AB /* Idea.swift */,
@@ -268,7 +283,12 @@
 				EFA788402F38EE0E00F1E3AB /* Idea.swift in Sources */,
 				50D4058B958045998444534B /* Theme.swift in Sources */,
 				F5C8302344834CECA2608C12 /* ThemePreviewView.swift in Sources */,
+				EFA7884C2F3B9A8C00F1E3AB /* WidgetRefreshManager.swift in Sources */,
 				EFA788412F38EE0E00F1E3AB /* SettingsView.swift in Sources */,
+				EFA788472F3B951B00F1E3AB /* NotificationSettingsView.swift in Sources */,
+				EFA788482F3B951B00F1E3AB /* NotificationManager.swift in Sources */,
+				EFA788492F3B951B00F1E3AB /* SpeechRecognizer.swift in Sources */,
+				EFA7884A2F3B951B00F1E3AB /* SpeechInputView.swift in Sources */,
 				EFA788422F38EE0E00F1E3AB /* IdeaListView.swift in Sources */,
 				14EC6CCEC528D9AD03F6D6E6 /* AppDelegate.swift in Sources */,
 			);

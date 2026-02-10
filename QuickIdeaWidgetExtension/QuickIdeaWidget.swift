@@ -9,14 +9,19 @@ final class Idea {
     var content: String
     var tags: [String]
     var createdAt: Date
-    var isCompleted: Bool
+    var updatedAt: Date
+    var statusRaw: String
+    @Attribute(.externalStorage) var imageData: [Data]
 
-    init(content: String, tags: [String] = []) {
+    init(content: String, tags: [String] = [], statusRaw: String = "未处理", imageData: [Data] = []) {
         self.id = UUID()
         self.content = content
         self.tags = tags
-        self.createdAt = Date()
-        self.isCompleted = false
+        let now = Date()
+        self.createdAt = now
+        self.updatedAt = now
+        self.statusRaw = statusRaw
+        self.imageData = imageData
     }
 
     var cleanContent: String {
@@ -99,9 +104,10 @@ struct Provider: TimelineProvider {
 
     private func fetchIdeas() -> [Idea] {
         let context = ModelContext(modelContainer)
+        // 只显示"未处理"状态的灵感
         let descriptor = FetchDescriptor<Idea>(
-            predicate: #Predicate { !$0.isCompleted },
-            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+            predicate: #Predicate { $0.statusRaw == "未处理" },
+            sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
         )
 
         do {
@@ -140,9 +146,9 @@ struct QuickIdeaWidgetEntryView: View {
     @Environment(\.widgetFamily) var widgetFamily
     var entry: Provider.Entry
 
-    // Refined Flomo 主题色
-    private let accentColor = Color(red: 0x30/255, green: 0xcf/255, blue: 0x79/255) // #30cf79
-    private let widgetBackground = Color(red: 0xf2/255, green: 0xf2/255, blue: 0xf2/255) // #f2f2f2
+    // QuickIdea 主题色（灵感橙黄）
+    private let accentColor = Color(red: 0xFF/255, green: 0xB8/255, blue: 0x4D/255) // #FFB84D
+    private let widgetBackground = Color(red: 0xf8/255, green: 0xf7/255, blue: 0xf4/255) // #f8f7f4
 
     var body: some View {
         Group {
@@ -174,7 +180,7 @@ struct QuickIdeaWidgetEntryView: View {
         VStack(spacing: 8) {
             Image(systemName: "lightbulb")
                 .font(.title2)
-            Text("还没有想法")
+            Text("还没有未处理的灵感")
                 .font(.caption)
         }
         .foregroundStyle(.secondary)
@@ -236,10 +242,18 @@ struct QuickIdeaWidgetEntryView: View {
             HStack {
                 Image(systemName: "lightbulb.fill")
                     .foregroundStyle(accentColor)
-                Text("我的想法")
+                Text("QuickIdea")
                     .font(.caption)
                     .fontWeight(.semibold)
                 Spacer()
+                Text("\(entry.ideas.count)")
+                    .font(.caption2)
+                    .fontWeight(.bold)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(accentColor.opacity(0.15))
+                    .foregroundStyle(accentColor)
+                    .clipShape(Capsule())
             }
 
             if let idea = entry.ideas.first {
@@ -267,9 +281,15 @@ struct QuickIdeaWidgetEntryView: View {
 
                 Spacer()
 
-                Text(entry.displayMode.rawValue)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                HStack {
+                    Text(entry.displayMode.rawValue)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text(shortDateString(idea.updatedAt))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .padding()
@@ -280,13 +300,20 @@ struct QuickIdeaWidgetEntryView: View {
             HStack {
                 Image(systemName: "lightbulb.fill")
                     .foregroundStyle(accentColor)
-                Text("我的想法")
+                Text("QuickIdea")
                     .font(.subheadline)
                     .fontWeight(.semibold)
                 Spacer()
-                Text(entry.displayMode.rawValue)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+                HStack(spacing: 4) {
+                    Text("\(entry.ideas.count) 个未处理")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Text("·")
+                        .foregroundStyle(.secondary)
+                    Text(entry.displayMode.rawValue)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             if entry.ideas.count == 1, let idea = entry.ideas.first {
@@ -323,7 +350,7 @@ struct QuickIdeaWidgetEntryView: View {
             Spacer()
 
             // 时间
-            Text(shortDateString(idea.createdAt))
+            Text(shortDateString(idea.updatedAt))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
@@ -396,8 +423,8 @@ struct QuickIdeaWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             QuickIdeaWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("我的想法")
-        .description("快速查看你记录的想法")
+        .configurationDisplayName("QuickIdea")
+        .description("随时查看未处理的灵感，防止遗忘")
         .supportedFamilies([
             .accessoryCircular,
             .accessoryRectangular,
